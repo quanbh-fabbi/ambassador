@@ -1,0 +1,47 @@
+.idea/
+.vscode/
+venv/
+.dbdata/
+cmake-build-debug/
+__pycache__
+*.pyc
+*.pyo
+.installed.cfg
+bin
+develop-eggs
+downloads
+eggs
+parts
+src/*.egg-info
+.DS_Store
+#lib
+lib64
+local.py
+logs/*
+*sqlite3
+media/
+.env
+venv2
+venv
+.DS_Store
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+staticfiles/
+
+# Logs
+logs
+*.log
+
+# dev file
+local.py
+.envs
+
+templates/sw.js
+static/assets/js/firebase/init.js
+
+apps/core/services/sagawa/*.sftp
+apps/core/services/sagawa/cronjob.py
