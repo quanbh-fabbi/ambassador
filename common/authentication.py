@@ -1,9 +1,28 @@
 import jwt
 import datetime
+from core.models import User
+from rest_framework.authentication import BaseAuthentication
+from rest_framework import exceptions
 from app import settings
 
 
-class JWTAuthentication:
+class JWTAuthentication(BaseAuthentication):
+
+    def authenticate(self, request):
+        # get the cookies from request
+        token = request.COOKIES.get('jwt')
+        if not token:
+            return None
+        try:
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithm=['HS256'])
+        except jwt.ExpiredSignatureError:
+            raise exceptions.AuthenticationFailed('unauthenticated')
+
+        user = User.objects.get(pk=payload['user_id'])
+        if user is None:
+            raise exceptions.AuthenticationFailed('User not found!')
+
+        return (user, None)
 
     @staticmethod
     def generate_jwt(id):
