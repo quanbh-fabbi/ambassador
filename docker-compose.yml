@@ -5,7 +5,7 @@ services:
     volumes:
     - .:/apps
     ports:
-    - 1234:8000
+    - 8000:8000
     depends_on:
       - db
 
