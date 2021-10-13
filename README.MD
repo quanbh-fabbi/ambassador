@@ -18,3 +18,6 @@
 - POST /api/admin/logout
 - PUT /api/admin/users/info
 - PUT /api/admin/users/password
+
+### 12. Static method
+- A static method with @staticmethod won't have (self)
