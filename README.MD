@@ -21,3 +21,6 @@
 
 ### 12. Static method
 - A static method with @staticmethod won't have (self)
+
+### 14. Logout
+- Docker up not reload when code change? Check volumes
