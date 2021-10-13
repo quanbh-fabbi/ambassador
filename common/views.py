@@ -2,6 +2,8 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import exceptions
+
+from common.authentication import JWTAuthentication
 from core.models import *
 from common.serializers import UserSerializer
 
@@ -34,4 +36,14 @@ class LoginAPIView(APIView):
         if not user.check_password(password):
             raise exceptions.AuthenticationFailed('Incorrect Password!')
 
-        return Response(UserSerializer(user).data)
+        jwt_authentication = JWTAuthentication()
+
+        token = jwt_authentication.generate_jwt(user.id)
+
+        response = Response()
+        response.set_cookie(key='jwt', value=token, httponly=True)
+        response.data = {
+            'jwt': token
+        }
+
+        return response
