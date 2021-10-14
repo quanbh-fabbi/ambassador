@@ -7,4 +7,5 @@ urlpatterns = [
     path('ambassadors', AmbassadorAPIView.as_view()),
     path('products', ProductGenericAPIView.as_view()),
     path('products/<str:pk>', ProductGenericAPIView.as_view()),
+    path('users/<str:pk>/link', LinkAPIView.as_view()),
 ]
