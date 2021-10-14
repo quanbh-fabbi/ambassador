@@ -59,7 +59,7 @@ class Product(models.Model):
 class Link(models.Model):
     code = models.CharField(max_length=255,unique=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    products = models.ManyToManyField(Product)
+    products = models.ManyToManyField(Product, related_name="product")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
