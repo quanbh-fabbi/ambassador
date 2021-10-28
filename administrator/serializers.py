@@ -19,7 +19,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = '__all__'
 
-
+# just a comment
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True)
     total = serializers.SerializerMethodField('get_total')
