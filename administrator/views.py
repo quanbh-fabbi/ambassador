@@ -3,7 +3,7 @@ from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
 from common.authentication import JWTAuthentication
 from common.serializers import UserSerializer
-from administrator.serializers import ProductSerializer
+from administrator.serializers import *
 from core.models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -43,3 +43,23 @@ class ProductGenericAPIView(
 
     def delete(self, request, pk=None):
         return self.destroy
+
+
+class LinkAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk=None):
+        links = Link.objects.filter(user_id=pk)
+        serializer = LinkSerializer(links, many=True)
+        return Response(serializer.data)
+
+
+class OrderAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        orders = Order.objects.filter(complete=True)
+        serializer = OrderSerializer(orders, many=True)
+        return Response(serializer.data)
