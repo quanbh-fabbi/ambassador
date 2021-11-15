@@ -48,6 +48,15 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     objects = UserManager()
 
+    @property
+    def name(self):
+        return self.first_name + ' ' + self.last_name
+
+    @property
+    def revenue(self):
+        orders = Order.objects.filter(user_id=self.pk, complete=True)
+        return sum(o.ambassador_revenue for o in orders)
+
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
@@ -80,6 +89,14 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    @property
+    def name(self):
+        return self.first_name + ' ' + self.last_name
+
+    @property
+    def ambassador_revenue(self):
+        items = OrderItem.objects.filter(order_id=self.pk)
+        return sum(i.ambassador_revenue for i in items)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
