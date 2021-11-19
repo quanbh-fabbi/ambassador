@@ -1,11 +1,15 @@
 import math
+import random
+import string
 import time
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from administrator.serializers import ProductSerializer
+from administrator.serializers import ProductSerializer, LinkSerializer
+from common.authentication import JWTAuthentication
 from core.models import Product
 from django.core.cache import cache
 
@@ -57,3 +61,21 @@ class ProductBackEndAPIView(APIView):
                 'last_page': math.ceil(total / per_page)
             }
         })
+
+
+class LinkAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        user = request.user
+
+        serializer = LinkSerializer(data={
+            'user': user.id,
+            'code': ''.join(random.choices(string.ascii_lowercase + string.digits, k=6)),
+            'products': request.data['products']
+        })
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data)
