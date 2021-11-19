@@ -35,13 +35,14 @@ class ProductBackEndAPIView(APIView):
                 if (s.lower() in p.title.lower()) or (s.lower() in p.description.lower())
             ])
         total = len(products)
-
+        # add sort
         sort = request.query_params.get('sort', None)
         if sort == 'asc':
             products.sort(key=lambda p: p.price)
         elif sort == 'desc':
             products.sort(key=lambda p: p.price, reverse=True)
 
+        # add start and end page
         per_page = 9
         page = int(request.query_params.get('page', 1))
         start = (page - 1) * per_page
