@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.core.cache import cache
 from rest_framework import generics, mixins
 from rest_framework.permissions import IsAuthenticated
 from common.authentication import JWTAuthentication
@@ -7,7 +7,6 @@ from administrator.serializers import *
 from core.models import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
 
 
 class AmbassadorAPIView(APIView):
@@ -36,13 +35,31 @@ class ProductGenericAPIView(
         return self.list(request)
 
     def post(self, request):
-        return self.create(request)
+        response = self.create(request)
+        for key in cache.keys('*'):
+            if 'products_frontend' in key:
+                cache.delet(key)
+        cache.delete('products_frontend')
+        cache.delete('products_backend')
+        return response
 
     def put(self, request, pk=None):
-        return self.partial_update(request, pk)
+        response = self.partial_update(request, pk)
+        for key in cache.keys('*'):
+            if 'products_frontend' in key:
+                cache.delet(key)
+        cache.delete('products_frontend')
+        cache.delete('products_backend')
+        return response
 
     def delete(self, request, pk=None):
-        return self.destroy
+        response = self.destroy(request, pk)
+        for key in cache.keys('*'):
+            if 'products_frontend' in key:
+                cache.delet(key)
+        cache.delete('products_frontend')
+        cache.delete('products_backend')
+        return response
 
 
 class LinkAPIView(APIView):
