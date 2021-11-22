@@ -48,6 +48,15 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
     objects = UserManager()
 
+    @property
+    def name(self):
+        return self.first_name + ' ' + self.last_name
+
+    @property
+    def revenue(self):
+        orders = Order.objects.filter(user_id=self.pk, complete=True)
+        return sum(o.ambassador_revenue for o in orders)
+
 
 class Product(models.Model):
     title = models.CharField(max_length=255)

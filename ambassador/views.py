@@ -109,8 +109,8 @@ class RankingsAPIView(APIView):
         ambassadors = User.objects.filter(is_ambassador=True)
 
         response = list({
-            'name': a.first_name + a.last_name,
-            'email': a.email,
+            'name': a.name,
+            'email': a.revenue,
             } for a in ambassadors)
-        response.sort(key=lambda a: a['email'], reverse=True)
+        response.sort(key=lambda a: a['revenue'], reverse=True)
         return Response(response)
