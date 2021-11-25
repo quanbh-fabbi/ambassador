@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 
 from administrator.serializers import ProductSerializer, LinkSerializer
 from common.authentication import JWTAuthentication
-from core.models import Product, Link, Order
+from core.models import Product, Link, Order, User
 from django.core.cache import cache
 
 
@@ -99,3 +99,18 @@ class StatsAPIView(APIView):
             'count': len(orders),
             'revenue': sum(o.ambassador_revenue for o in orders)
         }
+
+
+class RankingsAPIView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        ambassadors = User.objects.filter(is_ambassador=True)
+
+        response = list({
+            'name': a.name,
+            'email': a.revenue,
+            } for a in ambassadors)
+        response.sort(key=lambda a: a['revenue'], reverse=True)
+        return Response(response)
