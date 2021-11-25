@@ -24,3 +24,6 @@
 
 ### 14. Logout
 - Docker up not reload when code change? Check volumes
+
+### 4.2 Getting Link Data
+- The remaining bugs are: mysql connection when run command, have no idea to fix.
